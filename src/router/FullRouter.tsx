@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom'
-import Home from '@/pages/Home/Home'
+import AbiCallerPage from '@/pages/AbiCaller/AbiCaller'
 
 export default function FullRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Home />}></Route>
+      <Route path="/" element={<AbiCallerPage />}></Route>
     </Routes>
   )
 }
