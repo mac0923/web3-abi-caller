@@ -6,7 +6,7 @@ import LocalesButton from '../LocalesButton/LocalesButton'
 export default function Header() {
   return (
     <>
-      <div className="header relative h-[64px] flex items-center border-b">
+      <div className="header relative h-[58px] flex items-center border-b">
         <div className="flex items-center">
           <img className="h-[24px] w-[24px]" src={LogoSvg} alt="" />
           <span className="ml-[6px] hidden font-bold lg:inline-block">Abi Caller</span>

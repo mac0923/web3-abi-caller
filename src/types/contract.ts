@@ -1,5 +1,5 @@
 export interface ContractOutput {
-  id: string
+  id: string // uuid
   contractId: string
   blockNumber: number
   funcName: string
@@ -8,11 +8,11 @@ export interface ContractOutput {
 }
 
 export interface ContractParams {
-  id: string
+  id: string // base64 code
   chainId: number
   isUseWallet: boolean
   address: string
   name: string
-  abi: string
+  abi: string // json string
   specifyBlock: boolean
 }
