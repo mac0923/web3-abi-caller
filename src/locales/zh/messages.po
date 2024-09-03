@@ -12,3 +12,61 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/components/AddContractButton/AddContractButton.tsx:5
+msgid "Add Contract"
+msgstr "添加合约"
+
+#: src/components/ContractPanel/ContractPanel.tsx:37
+msgid "Address"
+msgstr "合约地址"
+
+#: src/components/ContractPanel/ContractPanel.tsx:135
+#: src/components/ContractPanel/ContractPanel.tsx:287
+msgid "BlockNumber"
+msgstr "BlockNumber"
+
+#: src/components/ContractPanel/ContractPanel.tsx:36
+msgid "Chain"
+msgstr "链"
+
+#: src/components/ContractPanel/ContractPanel.tsx:234
+msgid "Clear Out"
+msgstr "清理输出"
+
+#: src/components/ContractPanel/ContractPanel.tsx:138
+msgid "Fetch data from the specified blockNumber"
+msgstr "从指定的BlockNumber中获取数据"
+
+#: src/components/ContractPanel/ContractPanel.tsx:124
+msgid "Function"
+msgstr "方法"
+
+#: src/components/ContractPanel/ContractPanel.tsx:35
+#: src/components/ContractPanel/ContractPanel.tsx:188
+msgid "Name"
+msgstr "字段名"
+
+#: src/components/ContractPanel/ContractPanel.tsx:141
+msgid "Not all rpc nodes support specifying blocks to read data from"
+msgstr "并非所有rpc节点都支持指定从指定BlockNumber读取数据"
+
+#: src/components/ContractPanel/ContractPanel.tsx:95
+msgid "Read"
+msgstr "读"
+
+#: src/components/ContractPanel/ContractPanel.tsx:233
+msgid "Run"
+msgstr "运行"
+
+#: src/components/ContractPanel/ContractPanel.tsx:189
+msgid "Type"
+msgstr "类型"
+
+#: src/components/ContractPanel/ContractPanel.tsx:190
+msgid "Value"
+msgstr "值"
+
+#: src/components/ContractPanel/ContractPanel.tsx:104
+msgid "Write"
+msgstr "写"
