@@ -39,7 +39,7 @@ export default function WalletButton() {
       {isConnected && address ? (
         <DropdownMenu>
           <DropdownMenuTrigger className="cursor-pointer">
-            <div className="rounded-[24px] pt-[2px] pb-[2px] pl-[12px] pr-[12px] text-[14px] border-slate-300 border-[1px] hover:text-sky-300">
+            <div className="rounded-[24px] pt-[2px] pb-[2px] pl-[12px] pr-[12px] text-[14px] border-slate-300 border-[1px] hover:text-sky-500">
               {ellipsisMiddle(address)}
             </div>
           </DropdownMenuTrigger>

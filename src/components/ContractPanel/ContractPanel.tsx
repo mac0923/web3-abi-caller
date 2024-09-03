@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
 import { Button } from '../ui/button'
 import { capitalizeFirstLetter, ellipsisMiddle } from '@/utils'
+import { Trans } from '@lingui/react'
 
 function MoreOptionsLine() {
   return (
@@ -32,7 +33,9 @@ function ContractInfoLine() {
     <>
       <div className="mt-[12px]">
         <div className="flex justify-between border-b leading-[42px] text-[16px]">
-          <div className="w-[33.3%] pl-[12px] text-zinc-300">{t`Name`}</div>
+          <div className="w-[33.3%] pl-[12px] text-zinc-300">
+            <Trans id="contract-name">Name</Trans>
+          </div>
           <div className="w-[33.3%] text-zinc-300">{t`Chain`}</div>
           <div className="w-[33.3%] text-zinc-300">{t`Address`}</div>
         </div>
@@ -185,7 +188,9 @@ function FunctionInputs({ specifyBlockNumber }: { specifyBlockNumber: boolean })
     <>
       <div>
         <div className="flex items-center justify-between leading-[42px] border-b text-[16px]">
-          <div className="w-[30%] pl-[8px] flex items-center">{t`Name`}</div>
+          <div className="w-[30%] pl-[8px] flex items-center">
+            <Trans id="func-name">Name</Trans>
+          </div>
           <div className="w-[28%] flex items-center">{t`Type`}</div>
           <div className="w-[42%] flex items-center justify-center">{t`Value`}</div>
         </div>
