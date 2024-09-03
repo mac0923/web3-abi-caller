@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { t } from '@lingui/macro'
+import { Trans } from '@lingui/react'
 import classnames from 'classnames'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
@@ -8,7 +9,8 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
 import { Button } from '../ui/button'
 import { capitalizeFirstLetter, ellipsisMiddle } from '@/utils'
-import { Trans } from '@lingui/react'
+import { ContractContext } from '@/context/ContractContext'
+import { ChainConfigs } from '@/config/chain'
 
 function MoreOptionsLine() {
   return (
@@ -29,6 +31,16 @@ function MoreOptionsLine() {
 }
 
 function ContractInfoLine() {
+  const { selectedContractId, contracts } = useContext(ContractContext)
+
+  useEffect(() => {
+    console.log('ppp', selectedContractId)
+  }, [selectedContractId])
+
+  const selectedContract = useMemo(() => {
+    return contracts.find(c => c.id === selectedContractId)
+  }, [contracts, selectedContractId])
+
   return (
     <>
       <div className="mt-[12px]">
@@ -40,16 +52,20 @@ function ContractInfoLine() {
           <div className="w-[33.3%] text-zinc-300">{t`Address`}</div>
         </div>
         <div className="flex justify-between border-b leading-[52px] text-[15px]">
-          <div className="w-[33.3%] pl-[12px]">ERC20</div>
-          <div className="w-[33.3%]">Arb</div>
+          <div className="w-[33.3%] pl-[12px]">
+            {selectedContract ? selectedContract.name : '--'}
+          </div>
+          <div className="w-[33.3%]">
+            {selectedContract ? ChainConfigs[selectedContract.chainId]?.name ?? '--' : '--'}
+          </div>
           <div className="w-[33.3%]">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="underline">
-                  {ellipsisMiddle('0xaf88d065e77c8cC2239327C5EDb3A432268e5831')}
+                  {selectedContract ? ellipsisMiddle(selectedContract.address) : '--'}
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>0xaf88d065e77c8cC2239327C5EDb3A432268e5831</p>
+                  <p>{selectedContract ? selectedContract.address : '--'}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

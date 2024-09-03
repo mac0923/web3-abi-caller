@@ -16,12 +16,12 @@ msgstr ""
 #. js-lingui-explicit-id
 #: src/components/ContractPanel/ContractPanel.tsx:37
 msgid "contract-name"
-msgstr ""
+msgstr "Name"
 
 #. js-lingui-explicit-id
 #: src/components/ContractPanel/ContractPanel.tsx:192
 msgid "func-name"
-msgstr ""
+msgstr "Name"
 
 #: src/components/AddContractButton/AddContractButton.tsx:5
 msgid "Add Contract"

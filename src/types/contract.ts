@@ -4,7 +4,9 @@ export interface ContractOutput {
   blockNumber: number
   funcName: string
   inputs: string[]
-  outputs: string[]
+  output: string
+  isError?: boolean
+  errMsg?: string
 }
 
 export interface ContractParams {

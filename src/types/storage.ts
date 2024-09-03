@@ -1,6 +1,7 @@
 import { ContractOutput, ContractParams } from './contract'
 
-export interface StorageItem {
-  contract: ContractParams
-  output: ContractOutput[]
+export interface StorageStruct {
+  selectedContractId: string
+  contracts: ContractParams[]
+  outputs: ContractOutput[]
 }
