@@ -16,7 +16,7 @@ export default function LocalesButton() {
     <>
       <div
         onClick={updateLocal}
-        className="flex items-center justify-center border-slate-300 border-[1px] rounded-[4px] text-[10px] w-[20px] h-[20px] cursor-pointer hover:text-sky-200"
+        className="flex items-center justify-center border-slate-300 border-[1px] rounded-[4px] text-[10px] w-[20px] h-[20px] cursor-pointer hover:text-sky-300"
       >
         {localeState === 'zh' ? '中' : 'EN'}
       </div>

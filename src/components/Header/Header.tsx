@@ -15,7 +15,7 @@ export default function Header() {
           <div>
             <LocalesButton></LocalesButton>
           </div>
-          <div className="ml-[4px]">
+          <div className="ml-[8px]">
             <WalletButton></WalletButton>
           </div>
         </div>
