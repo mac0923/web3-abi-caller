@@ -14,3 +14,12 @@ export function capitalizeFirstLetter(str: string) {
 export function lowercaseFirstLetter(str: string) {
   return str.charAt(0).toLowerCase() + str.slice(1)
 }
+
+export function isJsonArray(str: string) {
+  try {
+    const obj = JSON.parse(str)
+    return Array.isArray(obj)
+  } catch (e) {
+    return false
+  }
+}

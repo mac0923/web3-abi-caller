@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
 import { t } from '@lingui/macro'
 import { Trans } from '@lingui/react'
 import classnames from 'classnames'
@@ -32,10 +32,6 @@ function MoreOptionsLine() {
 
 function ContractInfoLine() {
   const { selectedContractId, contracts } = useContext(ContractContext)
-
-  useEffect(() => {
-    console.log('ppp', selectedContractId)
-  }, [selectedContractId])
 
   const selectedContract = useMemo(() => {
     return contracts.find(c => c.id === selectedContractId)

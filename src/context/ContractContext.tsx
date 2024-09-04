@@ -2,14 +2,14 @@ import { useLocalStorage } from 'react-use'
 import { useMemo, createContext } from 'react'
 import { ContractDataKey } from '@/config/storageKeys'
 import { ContractParams, ContractOutput, StorageStruct } from '@/types'
-import { DefaultContract, DefaultContract2 } from '@/config/contract'
+import { DefaultContract } from '@/config/contract'
 
 export const ContractContext = createContext<{
   storageData: StorageStruct
   contracts: ContractParams[]
   outputs: ContractOutput[]
   selectedContractId: string
-  addContract: (contract: ContractParams) => void
+  addContract: (contract: ContractParams, switchId: boolean) => void
   removeContract: (id: string) => void
   addContractOutput: (output: ContractOutput) => void
   clearContractOutput: () => void
@@ -36,7 +36,7 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
   const defaultData = useMemo(() => {
     return {
       selectedContractId: DefaultContract.id,
-      contracts: [DefaultContract, DefaultContract2],
+      contracts: [DefaultContract],
       outputs: [],
     }
   }, [])
@@ -59,13 +59,15 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
     return storageData.selectedContractId
   }, [storageData])
 
-  function addContract(contract: ContractParams) {
+  function addContract(contract: ContractParams, switchId: boolean) {
     const i = storageData.contracts.find(c => c.id === contract.id)
     if (i) {
       return
     }
+
     setData({
       ...storageData,
+      selectedContractId: switchId ? contract.id : storageData.selectedContractId,
       contracts: [...storageData.contracts, contract],
     })
   }
