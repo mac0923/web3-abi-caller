@@ -23,3 +23,11 @@ export function isJsonArray(str: string) {
     return false
   }
 }
+
+export function isReadFunc(item: never) {
+  return item['stateMutability'] === 'view'
+}
+
+export function isWriteFunc(item: never) {
+  return item['stateMutability'] === 'nonpayable' || item['stateMutability'] === 'payable'
+}

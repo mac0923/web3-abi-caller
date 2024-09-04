@@ -18,3 +18,8 @@ export interface ContractParams {
   abi: string // json string
   specifyBlock: boolean
 }
+
+export interface FunctionInputItem {
+  name: string
+  type: string
+}

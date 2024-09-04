@@ -9,7 +9,9 @@ export const ContractContext = createContext<{
   contracts: ContractParams[]
   outputs: ContractOutput[]
   selectedContractId: string
+  selectedContract: ContractParams | undefined
   addContract: (contract: ContractParams, switchId: boolean) => void
+  updateContract: (contract: ContractParams) => void
   removeContract: (id: string) => void
   addContractOutput: (output: ContractOutput) => void
   clearContractOutput: () => void
@@ -24,7 +26,9 @@ export const ContractContext = createContext<{
   contracts: [],
   outputs: [],
   selectedContractId: '',
+  selectedContract: undefined,
   addContract: () => {},
+  updateContract: () => {},
   removeContract: () => {},
   addContractOutput: () => {},
   clearContractOutput: () => {},
@@ -44,7 +48,10 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
   const [data, setData] = useLocalStorage<StorageStruct>(ContractDataKey, defaultData)
 
   const storageData = useMemo(() => {
-    return data ?? defaultData
+    if (!data || data.contracts.length === 0) {
+      return defaultData
+    }
+    return data
   }, [data, defaultData])
 
   const contracts = useMemo(() => {
@@ -59,6 +66,10 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
     return storageData.selectedContractId
   }, [storageData])
 
+  const selectedContract = useMemo(() => {
+    return contracts.find(c => c.id === selectedContractId)
+  }, [contracts, selectedContractId])
+
   function addContract(contract: ContractParams, switchId: boolean) {
     const i = storageData.contracts.find(c => c.id === contract.id)
     if (i) {
@@ -72,9 +83,21 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
     })
   }
 
+  function updateContract(contract: ContractParams) {
+    const index = storageData.contracts.findIndex(c => c.id === contract.id)
+    const newContracts = storageData.contracts
+    newContracts[index] = contract
+
+    setData({
+      ...storageData,
+      contracts: newContracts,
+    })
+  }
+
   function removeContract(id: string) {
     setData({
       ...storageData,
+      outputs: storageData.outputs.filter(item => item.contractId !== id),
       contracts: storageData.contracts.filter(c => c.id !== id),
     })
   }
@@ -111,7 +134,9 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
         contracts,
         outputs,
         selectedContractId,
+        selectedContract,
         addContract,
+        updateContract,
         removeContract,
         addContractOutput,
         clearContractOutput,
