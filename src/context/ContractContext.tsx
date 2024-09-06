@@ -1,4 +1,4 @@
-import { useLocalStorage } from 'react-use'
+import { useLocalStorage, useMount } from 'react-use'
 import { useMemo, createContext } from 'react'
 import { ContractDataKey } from '@/config/storageKeys'
 import { ContractParams, ContractOutput, StorageStruct } from '@/types'
@@ -36,6 +36,12 @@ export const ContractContext = createContext<{
   resetStorage: () => {},
 })
 
+const emptyStorageData: StorageStruct = {
+  selectedContractId: '',
+  contracts: [],
+  outputs: [],
+}
+
 export function ContractProvider({ children }: { children: React.ReactNode }) {
   const defaultData = useMemo(() => {
     return {
@@ -45,25 +51,24 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  const [data, setData] = useLocalStorage<StorageStruct>(ContractDataKey, defaultData)
+  const [storageData, setStorageData] = useLocalStorage<StorageStruct>(ContractDataKey, defaultData)
 
-  const storageData = useMemo(() => {
-    if (!data || data.contracts.length === 0) {
-      return defaultData
+  useMount(() => {
+    if (!storageData || storageData.contracts.length === 0) {
+      setStorageData(defaultData)
     }
-    return data
-  }, [data, defaultData])
+  })
 
   const contracts = useMemo(() => {
-    return storageData.contracts
+    return storageData?.contracts ?? []
   }, [storageData])
 
   const outputs = useMemo(() => {
-    return storageData.outputs
+    return storageData?.outputs ?? []
   }, [storageData])
 
   const selectedContractId = useMemo(() => {
-    return storageData.selectedContractId
+    return storageData?.selectedContractId ?? ''
   }, [storageData])
 
   const selectedContract = useMemo(() => {
@@ -71,66 +76,79 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
   }, [contracts, selectedContractId])
 
   function addContract(contract: ContractParams, switchId: boolean) {
-    const i = storageData.contracts.find(c => c.id === contract.id)
+    const data = storageData ?? emptyStorageData
+    const i = contracts.find(c => c.id === contract.id)
     if (i) {
       return
     }
 
-    setData({
-      ...storageData,
-      selectedContractId: switchId ? contract.id : storageData.selectedContractId,
-      contracts: [...storageData.contracts, contract],
+    setStorageData({
+      ...data,
+      selectedContractId: switchId ? contract.id : data.selectedContractId,
+      contracts: [...data.contracts, contract],
     })
   }
 
   function updateContract(contract: ContractParams) {
-    const index = storageData.contracts.findIndex(c => c.id === contract.id)
-    const newContracts = storageData.contracts
+    const data = storageData ?? emptyStorageData
+
+    const index = data.contracts.findIndex(c => c.id === contract.id)
+    const newContracts = data.contracts
     newContracts[index] = contract
 
-    setData({
-      ...storageData,
+    setStorageData({
+      ...data,
       contracts: newContracts,
     })
   }
 
   function removeContract(id: string) {
-    setData({
-      ...storageData,
-      outputs: storageData.outputs.filter(item => item.contractId !== id),
-      contracts: storageData.contracts.filter(c => c.id !== id),
+    const data = storageData ?? emptyStorageData
+
+    setStorageData({
+      ...data,
+      outputs: data.outputs.filter(item => item.contractId !== id),
+      contracts: data.contracts.filter(c => c.id !== id),
     })
   }
 
   function addContractOutput(output: ContractOutput) {
-    setData({
-      ...storageData,
-      outputs: [...storageData.outputs, output],
+    const data = storageData ?? emptyStorageData
+
+    console.log('dd', output)
+
+    setStorageData({
+      ...data,
+      outputs: [output, ...data.outputs],
     })
   }
 
   function clearContractOutput() {
-    setData({
-      ...storageData,
+    const data = storageData ?? emptyStorageData
+
+    setStorageData({
+      ...data,
       outputs: [],
     })
   }
 
   function updateSelectedContractId(id: string) {
-    setData({
-      ...storageData,
+    const data = storageData ?? emptyStorageData
+
+    setStorageData({
+      ...data,
       selectedContractId: id,
     })
   }
 
   function resetStorage() {
-    setData(defaultData)
+    setStorageData(defaultData)
   }
 
   return (
     <ContractContext.Provider
       value={{
-        storageData,
+        storageData: storageData ?? defaultData,
         contracts,
         outputs,
         selectedContractId,

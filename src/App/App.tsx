@@ -5,6 +5,7 @@ import { I18nProvider } from '@lingui/react'
 import { i18n } from '@lingui/core'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './App.scss'
+import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/ThemeProvider/ThemeProvider'
 import { wagmiConfig } from '@/config/wagmi-config'
 import FullRouter from '@/router/FullRouter'
@@ -40,6 +41,7 @@ function App() {
                   <FullRouter></FullRouter>
                 </HashRouter>
               </FullApp>
+              <Toaster />
             </ThemeProvider>
           </QueryClientProvider>
         </WagmiProvider>

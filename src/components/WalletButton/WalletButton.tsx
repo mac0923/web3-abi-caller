@@ -12,7 +12,7 @@ import {
 import { ellipsisMiddle } from '@/utils'
 
 export default function WalletButton() {
-  const { connectors, connect } = useConnect()
+  const { connectors, connect, isPending } = useConnect()
   const { address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
   const [, copyValue] = useCopyToClipboard()
@@ -32,6 +32,7 @@ export default function WalletButton() {
     <>
       {!isConnected ? (
         <Button
+          disabled={isPending}
           className="bg-sky-600 text-white hover:bg-sky-500 h-[30px] text-[13px] pl-[8px] pr-[8px] pt-[4px] pb-[4px]"
           onClick={connectWallet}
         >{t`Connect Wallet`}</Button>

@@ -80,7 +80,7 @@ export default function AddContractButton() {
 
   return (
     <Dialog open={showDialog} onOpenChange={v => setShowDialog(v)}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button variant="outline">{t`Add Contract`}</Button>
       </DialogTrigger>
       <DialogContent>
@@ -96,18 +96,13 @@ export default function AddContractButton() {
             <div className="flex items-center mb-[16px]">
               <div className="w-[68px]">{t`Chain`}</div>
               <div className="w-[calc(100%-68px)]">
-                <Select>
-                  <SelectTrigger className="w-[100%]" value={chain}>
+                <Select defaultValue={chain} onValueChange={(v: string) => setChain(v)}>
+                  <SelectTrigger className="w-[100%]">
                     <SelectValue placeholder={t`Chain`} />
                   </SelectTrigger>
                   <SelectContent>
                     {SUPPORTED_CHAINS.map(id => (
-                      <SelectItem
-                        className="cursor-pointer"
-                        key={id}
-                        value={id.toString()}
-                        onSelect={() => setChain(id.toString())}
-                      >
+                      <SelectItem className="cursor-pointer" key={id} value={id.toString()}>
                         {ChainConfigs[id].name}
                       </SelectItem>
                     ))}

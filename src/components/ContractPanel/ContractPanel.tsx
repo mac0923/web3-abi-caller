@@ -1,38 +1,232 @@
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
+import { isAddress } from 'viem'
 import { t } from '@lingui/macro'
 import { Trans } from '@lingui/react'
+import { useAccount } from 'wagmi'
+import { toast } from 'sonner'
 import { TrashIcon, Pencil2Icon } from '@radix-ui/react-icons'
 import classnames from 'classnames'
+import JSONBig from 'json-bigint'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Switch } from '@/components/ui/switch'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Input } from '@/components/ui/input'
 import { Button } from '../ui/button'
-import { capitalizeFirstLetter, ellipsisMiddle, isReadFunc, isWriteFunc } from '@/utils'
+import {
+  capitalizeFirstLetter,
+  ellipsisMiddle,
+  generateUuid,
+  isReadFunc,
+  isWriteFunc,
+} from '@/utils'
 import { ContractContext } from '@/context/ContractContext'
-import { ChainConfigs } from '@/config/chain'
+import { ChainConfigs, ChainId, SUPPORTED_CHAINS } from '@/config/chain'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Textarea } from '../ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { isJsonArray } from '@/utils'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { readContract, writeContract } from '@/utils/contract'
+import { getEthersProvider, getEthersSigner } from '@/utils/chain'
+import { wagmiConfig } from '@/config/wagmi-config'
 
 function MoreOptionsLine() {
-  const { selectedContractId, removeContract } = useContext(ContractContext)
+  const { selectedContractId, selectedContract, removeContract, updateContract } =
+    useContext(ContractContext)
 
-  function onDeleteContract() {
-    removeContract(selectedContractId)
+  function EditButton() {
+    const [name, setName] = useState('')
+    const [showDialog, setShowDialog] = useState(false)
+
+    function updateName(e: React.ChangeEvent<HTMLInputElement>) {
+      setName(e.target.value)
+    }
+
+    const [chain, setChain] = useState(ChainId.Mainnet.toString())
+
+    const [address, setAddress] = useState('')
+    function updateAddress(e: React.ChangeEvent<HTMLInputElement>) {
+      setAddress(e.target.value)
+    }
+
+    const [abi, setAbi] = useState('')
+    function updateAbi(e: React.ChangeEvent<HTMLTextAreaElement>) {
+      setAbi(e.target.value)
+    }
+
+    useEffect(() => {
+      if (selectedContract) {
+        setName(selectedContract.name)
+        setChain(selectedContract.chainId.toString())
+        setAddress(selectedContract.address)
+        setAbi(selectedContract.abi)
+      }
+    }, [])
+
+    const validateAddress = useMemo(() => {
+      return isAddress(address)
+    }, [address])
+
+    const validateAbi = useMemo(() => {
+      return isJsonArray(abi)
+    }, [abi])
+
+    const confirmDisabled = useMemo(() => {
+      if (name && chain && address && abi && validateAddress && validateAbi) {
+        return false
+      }
+      return true
+    }, [name, chain, address, abi, validateAddress, validateAbi])
+
+    function onConfirm() {
+      if (!selectedContract) {
+        return
+      }
+      updateContract({
+        ...selectedContract,
+        chainId: Number(chain),
+        address: address,
+        name: name,
+        abi: abi,
+      })
+      setShowDialog(false)
+    }
+
+    return (
+      <Dialog open={showDialog} onOpenChange={v => setShowDialog(v)}>
+        <DialogTrigger asChild>
+          <Button className="mr-[6px]" variant="outline">
+            <div className="flex items-center">
+              <Pencil2Icon className="mr-[6px]"></Pencil2Icon> {t`Edit`}
+            </div>
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t`Add Contract`}</DialogTitle>
+            <DialogDescription>
+              <div className="flex items-center mb-[16px] mt-[24px]">
+                <div className="w-[68px]">{t`Name`}</div>
+                <div className="w-[calc(100%-68px)]">
+                  <Input value={name} onInput={updateName} placeholder={t`Name`} />
+                </div>
+              </div>
+              <div className="flex items-center mb-[16px]">
+                <div className="w-[68px]">{t`Chain`}</div>
+                <div className="w-[calc(100%-68px)]">
+                  <Select defaultValue={chain} onValueChange={(v: string) => setChain(v)}>
+                    <SelectTrigger className="w-[100%]">
+                      <SelectValue placeholder={t`Chain`} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SUPPORTED_CHAINS.map(id => (
+                        <SelectItem className="cursor-pointer" key={id} value={id.toString()}>
+                          {ChainConfigs[id].name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex items-center mb-[16px]">
+                <div className="w-[68px]">{t`Contract`}</div>
+                <div className="w-[calc(100%-68px)]">
+                  <Input value={address} onInput={updateAddress} placeholder={t`Contract`} />
+                </div>
+              </div>
+              <div className="flex items-start">
+                <div className="w-[68px]">{t`Abi`}</div>
+                <div className="w-[calc(100%-68px)]">
+                  <Textarea
+                    value={abi}
+                    onInput={updateAbi}
+                    className="h-[120px]"
+                    placeholder={t`Abi`}
+                  />
+                </div>
+              </div>
+              <div className="mt-[24px] flex items-center justify-end">
+                <Button
+                  variant="outline"
+                  className="mr-[16px] bg-orange-500 text-white hover:bg-orange-400"
+                  onClick={() => setShowDialog(false)}
+                >{t`Cancel`}</Button>
+                <Button
+                  onClick={onConfirm}
+                  disabled={confirmDisabled}
+                  variant="outline"
+                  className="bg-sky-500 text-white hover:bg-sky-400"
+                >{t`Confirm`}</Button>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    )
+  }
+
+  const DeleteButton = () => {
+    const [showDialog, setShowDialog] = useState(false)
+
+    function onDeleteContract() {
+      removeContract(selectedContractId)
+      setShowDialog(false)
+    }
+
+    return (
+      <AlertDialog open={showDialog} onOpenChange={v => setShowDialog(v)}>
+        <AlertDialogTrigger asChild>
+          <Button className="mr-[6px]" variant="outline">
+            <div className="flex items-center">
+              <TrashIcon className="mr-[4px]"></TrashIcon> {t`Delete`}
+            </div>
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{`Confirm deletion?`}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t`Confirming the deletion of the ${selectedContract?.name ?? ''} contract?`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t`Cancel`}</AlertDialogCancel>
+            <AlertDialogAction onClick={onDeleteContract}>{t`Confirm`}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    )
   }
 
   return (
     <>
       <div className="flex items-center justify-end p">
-        <Button className="mr-[6px]" variant="outline">
-          <div className="flex items-center">
-            <Pencil2Icon className="mr-[6px]"></Pencil2Icon> {t`Edit`}
-          </div>
-        </Button>
-        <Button className="mr-[6px]" variant="outline" onClick={onDeleteContract}>
-          <div className="flex items-center">
-            <TrashIcon className="mr-[4px]"></TrashIcon> {t`Delete`}
-          </div>
-        </Button>
+        <EditButton></EditButton>
+        <DeleteButton></DeleteButton>
       </div>
     </>
   )
@@ -80,7 +274,7 @@ function FunctionList({ onSelect }: { onSelect: (p: { name: string; isWrite: boo
   const { selectedContract } = useContext(ContractContext)
 
   const functions = useMemo(() => {
-    const abi = JSON.parse(selectedContract?.abi ?? '[]') as never[]
+    const abi = JSON.parse(selectedContract?.abi ?? '[]') as any[]
     return abi.filter(item => item['type'] === 'function')
   }, [selectedContract?.abi])
 
@@ -179,13 +373,18 @@ function FunctionInfoLine({ funcName, isWrite }: { funcName: string; isWrite: bo
 }
 
 function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: boolean }) {
-  const { selectedContract, clearContractOutput } = useContext(ContractContext)
+  const { selectedContract, clearContractOutput, addContractOutput } = useContext(ContractContext)
+  const { isConnected } = useAccount()
 
   const [values, setValues] = useState<string[]>([])
   const [blockNumber, setBlockNumber] = useState('')
 
+  useEffect(() => {
+    setValues([])
+  }, [funcName])
+
   const functions = useMemo(() => {
-    const abi = JSON.parse(selectedContract?.abi ?? '[]') as never[]
+    const abi = JSON.parse(selectedContract?.abi ?? '[]') as any[]
     return abi.filter(item => item['type'] === 'function')
   }, [selectedContract?.abi])
 
@@ -222,8 +421,48 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
     setBlockNumber(target.value)
   }
 
-  function onRunFunc() {
-    // TODO
+  async function onRunFunc() {
+    if (!selectedContract) {
+      return
+    }
+    if (isWrite && !isConnected) {
+      toast.error(t`Please connect wallet first`, { duration: 3000, style: { fontSize: '16px' } })
+      return
+    }
+    let result
+    if (isWrite) {
+      const signer = await getEthersSigner(wagmiConfig, { chainId: selectedContract.chainId })
+      result = await writeContract({
+        signer: signer,
+        address: selectedContract.address,
+        abi: selectedContract.abi,
+        funcName: funcName,
+        args: values,
+      })
+    } else {
+      const provider = await getEthersProvider(wagmiConfig, { chainId: selectedContract.chainId })
+      if (!provider) {
+        toast.error(t`Failed to get provider`, { duration: 3000, style: { fontSize: '16px' } })
+        return
+      }
+      result = await readContract({
+        provider: provider,
+        address: selectedContract.address,
+        abi: selectedContract.abi,
+        funcName: funcName,
+        args: values,
+      })
+    }
+    addContractOutput({
+      id: generateUuid(),
+      contractId: selectedContract.id,
+      blockNumber: blockNumber ? Number(blockNumber) : undefined,
+      funcName: funcName,
+      inputs: values,
+      output: JSONBig.stringify(result.data),
+      isError: result.isError,
+      errMsg: result.isError ? result.data : undefined,
+    })
   }
 
   return (
@@ -279,7 +518,10 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
           disabled={!funcName}
           className="mr-[20px] w-[106px] bg-sky-500 text-white hover:bg-sky-400"
           onClick={onRunFunc}
-        >{t`Run`}</Button>
+        >
+          {t`Run`}
+        </Button>
+
         <Button
           className="w-[106px] bg-orange-500 text-white hover:bg-orange-400"
           onClick={clearContractOutput}
@@ -299,7 +541,7 @@ function FunctionOutputs() {
 
   function getChainName(contractId: string) {
     const contract = contracts.find(c => c.id === contractId)
-    return contract ? ChainConfigs[Number(contract.id)].name : '--'
+    return contract ? ChainConfigs[Number(contract.chainId)].name : '--'
   }
 
   return (
@@ -319,13 +561,16 @@ function FunctionOutputs() {
               ) : undefined}
             </div>
             <div>
-              <div
-                className={classnames('pl-[8px] pr-[8px] pt-[4px] pb-[4px] text-[15px]', [
-                  item.isError ? 'text-red-500' : 'text-white',
-                ])}
-              >
-                {item.isError ? item.errMsg : item.output}
-              </div>
+              <ScrollArea className="w-[55vw]">
+                <div
+                  className={classnames('pl-[12px] pr-[12px] pt-[6px] pb-[6px] text-[15px]', [
+                    item.isError ? 'text-red-500' : 'text-white',
+                  ])}
+                >
+                  {item.isError ? JSON.stringify(item.errMsg) : item.output}
+                </div>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
             </div>
           </div>
         ))}

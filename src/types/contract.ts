@@ -1,12 +1,12 @@
 export interface ContractOutput {
   id: string // uuid
   contractId: string
-  blockNumber: number
   funcName: string
   inputs: string[]
   output: string
+  blockNumber?: number
   isError?: boolean
-  errMsg?: string
+  errMsg?: any
 }
 
 export interface ContractParams {
