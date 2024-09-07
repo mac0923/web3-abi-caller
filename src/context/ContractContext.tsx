@@ -14,6 +14,7 @@ export const ContractContext = createContext<{
   updateContract: (contract: ContractParams) => void
   removeContract: (id: string) => void
   addContractOutput: (output: ContractOutput) => void
+  delContractOutput: (id: string) => void
   clearContractOutput: () => void
   updateSelectedContractId: (id: string) => void
   resetStorage: () => void
@@ -31,6 +32,7 @@ export const ContractContext = createContext<{
   updateContract: () => {},
   removeContract: () => {},
   addContractOutput: () => {},
+  delContractOutput: () => {},
   clearContractOutput: () => {},
   updateSelectedContractId: () => {},
   resetStorage: () => {},
@@ -115,11 +117,18 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
   function addContractOutput(output: ContractOutput) {
     const data = storageData ?? emptyStorageData
 
-    console.log('dd', output)
-
     setStorageData({
       ...data,
       outputs: [output, ...data.outputs],
+    })
+  }
+
+  function delContractOutput(id: string) {
+    const data = storageData ?? emptyStorageData
+
+    setStorageData({
+      ...data,
+      outputs: data.outputs.filter(item => item.id !== id),
     })
   }
 
@@ -157,6 +166,7 @@ export function ContractProvider({ children }: { children: React.ReactNode }) {
         updateContract,
         removeContract,
         addContractOutput,
+        delContractOutput,
         clearContractOutput,
         updateSelectedContractId,
         resetStorage,

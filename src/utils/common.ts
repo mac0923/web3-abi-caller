@@ -39,3 +39,11 @@ export function generateUuid() {
     return v.toString(16)
   })
 }
+
+export function formatJson(json: string) {
+  try {
+    return JSON.stringify(JSON.parse(json), null, 2)
+  } catch (e) {
+    return json
+  }
+}

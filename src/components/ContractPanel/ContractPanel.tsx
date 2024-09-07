@@ -16,6 +16,7 @@ import { Button } from '../ui/button'
 import {
   capitalizeFirstLetter,
   ellipsisMiddle,
+  formatJson,
   generateUuid,
   isReadFunc,
   isWriteFunc,
@@ -376,6 +377,7 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
   const { selectedContract, clearContractOutput, addContractOutput } = useContext(ContractContext)
   const { isConnected } = useAccount()
 
+  const [running, setRunning] = useState(false)
   const [values, setValues] = useState<string[]>([])
   const [blockNumber, setBlockNumber] = useState('')
 
@@ -422,47 +424,56 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
   }
 
   async function onRunFunc() {
-    if (!selectedContract) {
-      return
-    }
-    if (isWrite && !isConnected) {
-      toast.error(t`Please connect wallet first`, { duration: 3000, style: { fontSize: '16px' } })
-      return
-    }
-    let result
-    if (isWrite) {
-      const signer = await getEthersSigner(wagmiConfig, { chainId: selectedContract.chainId })
-      result = await writeContract({
-        signer: signer,
-        address: selectedContract.address,
-        abi: selectedContract.abi,
-        funcName: funcName,
-        args: values,
-      })
-    } else {
-      const provider = await getEthersProvider(wagmiConfig, { chainId: selectedContract.chainId })
-      if (!provider) {
-        toast.error(t`Failed to get provider`, { duration: 3000, style: { fontSize: '16px' } })
+    const call = async () => {
+      if (!selectedContract) {
         return
       }
-      result = await readContract({
-        provider: provider,
-        address: selectedContract.address,
-        abi: selectedContract.abi,
+      if (isWrite && !isConnected) {
+        toast.error(t`Please connect wallet first`, { duration: 3000, style: { fontSize: '16px' } })
+        return
+      }
+      let result
+      if (isWrite) {
+        const signer = await getEthersSigner(wagmiConfig, { chainId: selectedContract.chainId })
+        result = await writeContract({
+          signer: signer,
+          address: selectedContract.address,
+          abi: selectedContract.abi,
+          funcName: funcName,
+          args: values,
+        })
+      } else {
+        const provider = await getEthersProvider(wagmiConfig, { chainId: selectedContract.chainId })
+        if (!provider) {
+          toast.error(t`Failed to get provider`, { duration: 3000, style: { fontSize: '16px' } })
+          return
+        }
+        result = await readContract({
+          provider: provider,
+          address: selectedContract.address,
+          abi: selectedContract.abi,
+          funcName: funcName,
+          args: values,
+        })
+      }
+      addContractOutput({
+        id: generateUuid(),
+        contractId: selectedContract.id,
+        blockNumber: blockNumber ? Number(blockNumber) : undefined,
         funcName: funcName,
-        args: values,
+        inputs: values,
+        output: JSONBig.stringify(result.data),
+        isError: result.isError,
+        errMsg: result.isError ? result.data : undefined,
       })
     }
-    addContractOutput({
-      id: generateUuid(),
-      contractId: selectedContract.id,
-      blockNumber: blockNumber ? Number(blockNumber) : undefined,
-      funcName: funcName,
-      inputs: values,
-      output: JSONBig.stringify(result.data),
-      isError: result.isError,
-      errMsg: result.isError ? result.data : undefined,
-    })
+
+    try {
+      setRunning(true)
+      await call()
+    } finally {
+      setRunning(false)
+    }
   }
 
   return (
@@ -515,11 +526,11 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
 
       <div className="flex justify-end mr-[12px] mt-[22px]">
         <Button
-          disabled={!funcName}
+          disabled={!funcName || running}
           className="mr-[20px] w-[106px] bg-sky-500 text-white hover:bg-sky-400"
           onClick={onRunFunc}
         >
-          {t`Run`}
+          {!running ? t`Run` : `Running...`}
         </Button>
 
         <Button
@@ -532,7 +543,7 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
 }
 
 function FunctionOutputs() {
-  const { outputs, contracts } = useContext(ContractContext)
+  const { outputs, contracts, delContractOutput } = useContext(ContractContext)
 
   function getContractName(contractId: string) {
     const contract = contracts.find(c => c.id === contractId)
@@ -554,11 +565,17 @@ function FunctionOutputs() {
           >
             <div className="flex items-center justify-between h-[36px] border-b pl-[8px] pr-[8px] text-[15px]">
               <div>{`${getContractName(item.contractId)}(${getChainName(item.contractId)}): ${item.funcName}`}</div>
-              {item.blockNumber ? (
-                <div>
-                  {t`BlockNumber`}: {item.blockNumber}
-                </div>
-              ) : undefined}
+              <div className="flex items-center">
+                {item.blockNumber ? (
+                  <div>
+                    {t`BlockNumber`}: {item.blockNumber}
+                  </div>
+                ) : undefined}
+                <TrashIcon
+                  onClick={() => delContractOutput(item.id)}
+                  className="ml-[8px] cursor-pointer hover:text-red-500"
+                ></TrashIcon>
+              </div>
             </div>
             <div>
               <ScrollArea className="w-[55vw]">
@@ -567,7 +584,9 @@ function FunctionOutputs() {
                     item.isError ? 'text-red-500' : 'text-white',
                   ])}
                 >
-                  {item.isError ? JSON.stringify(item.errMsg) : item.output}
+                  <pre className="pl-[12px] pr-[12px] pt-[6px] pb-[6px] max-h-[220px]">
+                    {item.isError ? JSON.stringify(item.errMsg) : formatJson(item.output)}
+                  </pre>
                 </div>
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
