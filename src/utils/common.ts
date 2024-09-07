@@ -40,21 +40,25 @@ export function generateUuid() {
   })
 }
 
+export function parseJson(json: string) {
+  try {
+    return JSON.parse(json, (_, value) => {
+      if (typeof value === 'number') {
+        return BigInt(value).toString()
+      }
+      if (typeof value === 'bigint') {
+        return value.toString()
+      }
+      return value
+    })
+  } catch (e) {
+    return json
+  }
+}
+
 export function formatJson(json: string) {
   try {
-    return JSON.stringify(
-      JSON.parse(json, (_, value) => {
-        if (typeof value === 'number') {
-          return BigInt(value).toString()
-        }
-        if (typeof value === 'bigint') {
-          return value.toString()
-        }
-        return value
-      }),
-      undefined,
-      2
-    )
+    return JSON.stringify(parseJson(json), undefined, 2)
   } catch (e) {
     return json
   }

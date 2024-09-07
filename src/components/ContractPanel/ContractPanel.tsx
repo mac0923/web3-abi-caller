@@ -8,6 +8,9 @@ import { TrashIcon, Pencil2Icon, CopyIcon } from '@radix-ui/react-icons'
 import classnames from 'classnames'
 import JSONBig from 'json-bigint'
 import { useCopyToClipboard } from 'react-use'
+import { JsonView } from 'react-json-view-lite'
+import '@/styles/json.module.css'
+import { CustomDarkJsonStyle } from '@/config/json-style'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Switch } from '@/components/ui/switch'
@@ -21,6 +24,7 @@ import {
   generateUuid,
   isReadFunc,
   isWriteFunc,
+  parseJson,
 } from '@/utils'
 import { ContractContext } from '@/context/ContractContext'
 import { ChainConfigs, ChainId, SUPPORTED_CHAINS } from '@/config/chain'
@@ -567,7 +571,7 @@ function FunctionOutputs() {
             className="ml-[24px] mr-[24px] border [&:not(:first-child)]:mt-[16px] rounded-[6px]"
           >
             <div className="flex items-center justify-between h-[42px] border-b pl-[8px] pr-[8px] text-[15px]">
-              <div>{`${getContractName(item.contractId)}(${getChainName(item.contractId)}): ${item.funcName}`}</div>
+              <div className="font-[500] text-slate-100">{`${getContractName(item.contractId)}(${getChainName(item.contractId)}): ${item.funcName}`}</div>
               <div className="flex items-center">
                 {item.blockNumber ? (
                   <div>
@@ -589,13 +593,19 @@ function FunctionOutputs() {
             <div>
               <ScrollArea className="w-[55vw]">
                 <div
-                  className={classnames('pl-[12px] pr-[12px] pt-[6px] pb-[6px] text-[15px]', [
-                    item.isError ? 'text-red-500' : 'text-white',
-                  ])}
+                  className={classnames(
+                    'pl-[12px] pr-[12px] pt-[6px] pb-[6px] text-[15px] max-h-[220px]',
+                    [item.isError ? 'text-red-500' : 'text-white']
+                  )}
                 >
-                  <pre className="pl-[12px] pr-[12px] pt-[6px] pb-[6px] max-h-[220px]">
-                    {item.isError ? JSON.stringify(item.errMsg) : formatJson(item.output)}
-                  </pre>
+                  {item.isError ? (
+                    <pre className="pl-[12px] pr-[12px] pt-[6px] pb-[6px] ">
+                      {item.isError ? JSON.stringify(item.errMsg) : undefined}
+                    </pre>
+                  ) : undefined}
+                  {!item.isError ? (
+                    <JsonView data={parseJson(item.output)} style={CustomDarkJsonStyle} />
+                  ) : undefined}
                 </div>
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
