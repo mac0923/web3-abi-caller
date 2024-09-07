@@ -46,6 +46,13 @@ export default function AddContractButton() {
     setAbi(e.target.value)
   }
 
+  function resetInputValue() {
+    setName('')
+    setChain(ChainId.Mainnet.toString())
+    setAddress('')
+    setAbi('')
+  }
+
   const validateAddress = useMemo(() => {
     return isAddress(address)
   }, [address])
@@ -60,6 +67,11 @@ export default function AddContractButton() {
     }
     return true
   }, [name, chain, address, abi, validateAddress, validateAbi])
+
+  function updateDialogState(v: boolean) {
+    setShowDialog(v)
+    resetInputValue()
+  }
 
   function onConfirm() {
     const id = encodeContractId(chain, address)
@@ -79,7 +91,7 @@ export default function AddContractButton() {
   }
 
   return (
-    <Dialog open={showDialog} onOpenChange={v => setShowDialog(v)}>
+    <Dialog open={showDialog} onOpenChange={v => updateDialogState(v)}>
       <DialogTrigger asChild>
         <Button variant="outline">{t`Add Contract`}</Button>
       </DialogTrigger>
@@ -90,14 +102,19 @@ export default function AddContractButton() {
             <div className="flex items-center mb-[16px] mt-[24px]">
               <div className="w-[68px]">{t`Name`}</div>
               <div className="w-[calc(100%-68px)]">
-                <Input value={name} onInput={updateName} placeholder={t`Name`} />
+                <Input
+                  className="text-slate-50"
+                  value={name}
+                  onInput={updateName}
+                  placeholder={t`Name`}
+                />
               </div>
             </div>
             <div className="flex items-center mb-[16px]">
               <div className="w-[68px]">{t`Chain`}</div>
               <div className="w-[calc(100%-68px)]">
                 <Select defaultValue={chain} onValueChange={(v: string) => setChain(v)}>
-                  <SelectTrigger className="w-[100%]">
+                  <SelectTrigger className="w-[100%] text-slate-50">
                     <SelectValue placeholder={t`Chain`} />
                   </SelectTrigger>
                   <SelectContent>
@@ -113,7 +130,12 @@ export default function AddContractButton() {
             <div className="flex items-center mb-[16px]">
               <div className="w-[68px]">{t`Contract`}</div>
               <div className="w-[calc(100%-68px)]">
-                <Input value={address} onInput={updateAddress} placeholder={t`Contract`} />
+                <Input
+                  className="text-slate-50"
+                  value={address}
+                  onInput={updateAddress}
+                  placeholder={t`Contract`}
+                />
               </div>
             </div>
             <div className="flex items-start">
@@ -122,7 +144,7 @@ export default function AddContractButton() {
                 <Textarea
                   value={abi}
                   onInput={updateAbi}
-                  className="h-[120px]"
+                  className="h-[120px] text-slate-50"
                   placeholder={t`Abi`}
                 />
               </div>

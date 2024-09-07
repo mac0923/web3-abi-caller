@@ -138,14 +138,19 @@ function MoreOptionsLine() {
               <div className="flex items-center mb-[16px] mt-[24px]">
                 <div className="w-[68px]">{t`Name`}</div>
                 <div className="w-[calc(100%-68px)]">
-                  <Input value={name} onInput={updateName} placeholder={t`Name`} />
+                  <Input
+                    className="text-slate-50"
+                    value={name}
+                    onInput={updateName}
+                    placeholder={t`Name`}
+                  />
                 </div>
               </div>
               <div className="flex items-center mb-[16px]">
                 <div className="w-[68px]">{t`Chain`}</div>
                 <div className="w-[calc(100%-68px)]">
                   <Select defaultValue={chain} onValueChange={(v: string) => setChain(v)}>
-                    <SelectTrigger className="w-[100%]">
+                    <SelectTrigger className="w-[100%] text-slate-50">
                       <SelectValue placeholder={t`Chain`} />
                     </SelectTrigger>
                     <SelectContent>
@@ -161,7 +166,12 @@ function MoreOptionsLine() {
               <div className="flex items-center mb-[16px]">
                 <div className="w-[68px]">{t`Contract`}</div>
                 <div className="w-[calc(100%-68px)]">
-                  <Input value={address} onInput={updateAddress} placeholder={t`Contract`} />
+                  <Input
+                    className="text-slate-50"
+                    value={address}
+                    onInput={updateAddress}
+                    placeholder={t`Contract`}
+                  />
                 </div>
               </div>
               <div className="flex items-start">
@@ -170,7 +180,7 @@ function MoreOptionsLine() {
                   <Textarea
                     value={abi}
                     onInput={updateAbi}
-                    className="h-[120px]"
+                    className="h-[120px] text-slate-50"
                     placeholder={t`Abi`}
                   />
                 </div>
@@ -504,7 +514,7 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
               <div className="w-[42%]">
                 <Input
                   key={index}
-                  className="w-[calc(100%-4px)]"
+                  className="w-[calc(100%-4px)] text-slate-50"
                   value={values[index] ?? ''}
                   onInput={e => updateValue(e, index)}
                   placeholder={`${capitalizeFirstLetter(item.name)}(${capitalizeFirstLetter(item.type)})`}
@@ -518,7 +528,7 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
               <div className="w-[28%]">Number</div>
               <div className="w-[42%]">
                 <Input
-                  className="w-[calc(100%-4px)]"
+                  className="w-[calc(100%-4px)] text-slate-50"
                   value={blockNumber}
                   onInput={e => updateBlockNumber(e)}
                   placeholder="BlockNumber(Number)"
