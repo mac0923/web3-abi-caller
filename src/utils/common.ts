@@ -42,7 +42,19 @@ export function generateUuid() {
 
 export function formatJson(json: string) {
   try {
-    return JSON.stringify(JSON.parse(json), null, 2)
+    return JSON.stringify(
+      JSON.parse(json, (_, value) => {
+        if (typeof value === 'number') {
+          return BigInt(value).toString()
+        }
+        if (typeof value === 'bigint') {
+          return value.toString()
+        }
+        return value
+      }),
+      undefined,
+      2
+    )
   } catch (e) {
     return json
   }

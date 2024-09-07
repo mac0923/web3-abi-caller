@@ -530,7 +530,7 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
           className="mr-[20px] w-[106px] bg-sky-500 text-white hover:bg-sky-400"
           onClick={onRunFunc}
         >
-          {!running ? t`Run` : `Running...`}
+          {!running ? t`Run` : t`Running...`}
         </Button>
 
         <Button
