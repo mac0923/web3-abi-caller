@@ -4,9 +4,10 @@ import { t } from '@lingui/macro'
 import { Trans } from '@lingui/react'
 import { useAccount } from 'wagmi'
 import { toast } from 'sonner'
-import { TrashIcon, Pencil2Icon } from '@radix-ui/react-icons'
+import { TrashIcon, Pencil2Icon, CopyIcon } from '@radix-ui/react-icons'
 import classnames from 'classnames'
 import JSONBig from 'json-bigint'
+import { useCopyToClipboard } from 'react-use'
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Switch } from '@/components/ui/switch'
@@ -545,6 +546,8 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
 function FunctionOutputs() {
   const { outputs, contracts, delContractOutput } = useContext(ContractContext)
 
+  const [, copyValue] = useCopyToClipboard()
+
   function getContractName(contractId: string) {
     const contract = contracts.find(c => c.id === contractId)
     return contract ? contract.name : '--'
@@ -563,7 +566,7 @@ function FunctionOutputs() {
             key={index}
             className="ml-[24px] mr-[24px] border [&:not(:first-child)]:mt-[16px] rounded-[6px]"
           >
-            <div className="flex items-center justify-between h-[36px] border-b pl-[8px] pr-[8px] text-[15px]">
+            <div className="flex items-center justify-between h-[42px] border-b pl-[8px] pr-[8px] text-[15px]">
               <div>{`${getContractName(item.contractId)}(${getChainName(item.contractId)}): ${item.funcName}`}</div>
               <div className="flex items-center">
                 {item.blockNumber ? (
@@ -571,9 +574,15 @@ function FunctionOutputs() {
                     {t`BlockNumber`}: {item.blockNumber}
                   </div>
                 ) : undefined}
+                <CopyIcon
+                  onClick={() =>
+                    copyValue(item.isError ? JSON.stringify(item.errMsg) : formatJson(item.output))
+                  }
+                  className="ml-[8px] cursor-pointer hover:text-sky-500 size-[15px]"
+                ></CopyIcon>
                 <TrashIcon
                   onClick={() => delContractOutput(item.id)}
-                  className="ml-[8px] cursor-pointer hover:text-red-500"
+                  className="ml-[8px] cursor-pointer hover:text-red-500 size-[16px]"
                 ></TrashIcon>
               </div>
             </div>
