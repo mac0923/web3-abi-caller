@@ -7,7 +7,7 @@
 ```
 package manager: pnpm
 
-node.js == 20.15.0
+node >= 20.15.0 < 21
 pnpm >= 9.2.0
 ```
 
