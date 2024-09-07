@@ -14,62 +14,66 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. js-lingui-explicit-id
-#: src/components/ContractPanel/ContractPanel.tsx:244
+#: src/components/ContractPanel/ContractPanel.tsx:245
 msgid "contract-name"
 msgstr "Name"
 
 #. js-lingui-explicit-id
-#: src/components/ContractPanel/ContractPanel.tsx:486
+#: src/components/ContractPanel/ContractPanel.tsx:487
 msgid "func-name"
 msgstr "Name"
 
 #: src/components/AddContractButton/AddContractButton.tsx:120
 #: src/components/AddContractButton/AddContractButton.tsx:126
-#: src/components/ContractPanel/ContractPanel.tsx:163
-#: src/components/ContractPanel/ContractPanel.tsx:169
+#: src/components/ContractPanel/ContractPanel.tsx:164
+#: src/components/ContractPanel/ContractPanel.tsx:170
 msgid "Abi"
 msgstr ""
 
 #: src/components/AddContractButton/AddContractButton.tsx:84
 #: src/components/AddContractButton/AddContractButton.tsx:88
-#: src/components/ContractPanel/ContractPanel.tsx:131
+#: src/components/ContractPanel/ContractPanel.tsx:132
 msgid "Add Contract"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:247
+#: src/components/ContractPanel/ContractPanel.tsx:248
 msgid "Address"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:358
-#: src/components/ContractPanel/ContractPanel.tsx:571
+#: src/components/ContractPanel/ContractPanel.tsx:359
+#: src/components/ContractPanel/ContractPanel.tsx:574
 msgid "BlockNumber"
 msgstr ""
 
 #: src/components/AddContractButton/AddContractButton.tsx:135
-#: src/components/ContractPanel/ContractPanel.tsx:178
-#: src/components/ContractPanel/ContractPanel.tsx:218
+#: src/components/ContractPanel/ContractPanel.tsx:179
+#: src/components/ContractPanel/ContractPanel.tsx:219
 msgid "Cancel"
 msgstr ""
 
 #: src/components/AddContractButton/AddContractButton.tsx:97
 #: src/components/AddContractButton/AddContractButton.tsx:101
-#: src/components/ContractPanel/ContractPanel.tsx:140
-#: src/components/ContractPanel/ContractPanel.tsx:144
-#: src/components/ContractPanel/ContractPanel.tsx:246
+#: src/components/ContractPanel/ContractPanel.tsx:141
+#: src/components/ContractPanel/ContractPanel.tsx:145
+#: src/components/ContractPanel/ContractPanel.tsx:247
 msgid "Chain"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:539
+#: src/components/ContractPanel/ContractPanel.tsx:540
 msgid "Clear Out"
 msgstr ""
 
 #: src/components/AddContractButton/AddContractButton.tsx:141
-#: src/components/ContractPanel/ContractPanel.tsx:184
-#: src/components/ContractPanel/ContractPanel.tsx:219
+#: src/components/ContractPanel/ContractPanel.tsx:185
+#: src/components/ContractPanel/ContractPanel.tsx:220
 msgid "Confirm"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:214
+#: src/components/ContractPanel/ContractPanel.tsx:213
+msgid "Confirm deletion?"
+msgstr ""
+
+#: src/components/ContractPanel/ContractPanel.tsx:215
 msgid "Confirming the deletion of the {0} contract?"
 msgstr ""
 
@@ -79,8 +83,8 @@ msgstr ""
 
 #: src/components/AddContractButton/AddContractButton.tsx:114
 #: src/components/AddContractButton/AddContractButton.tsx:116
-#: src/components/ContractPanel/ContractPanel.tsx:157
-#: src/components/ContractPanel/ContractPanel.tsx:159
+#: src/components/ContractPanel/ContractPanel.tsx:158
+#: src/components/ContractPanel/ContractPanel.tsx:160
 msgid "Contract"
 msgstr ""
 
@@ -88,7 +92,7 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:206
+#: src/components/ContractPanel/ContractPanel.tsx:207
 msgid "Delete"
 msgstr ""
 
@@ -96,57 +100,57 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:125
+#: src/components/ContractPanel/ContractPanel.tsx:126
 msgid "Edit"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:448
+#: src/components/ContractPanel/ContractPanel.tsx:449
 msgid "Failed to get provider"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:361
+#: src/components/ContractPanel/ContractPanel.tsx:362
 msgid "Fetch data from the specified blockNumber"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:347
+#: src/components/ContractPanel/ContractPanel.tsx:348
 msgid "Function"
 msgstr ""
 
 #: src/components/AddContractButton/AddContractButton.tsx:91
 #: src/components/AddContractButton/AddContractButton.tsx:93
-#: src/components/ContractPanel/ContractPanel.tsx:134
-#: src/components/ContractPanel/ContractPanel.tsx:136
+#: src/components/ContractPanel/ContractPanel.tsx:135
+#: src/components/ContractPanel/ContractPanel.tsx:137
 msgid "Name"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:364
+#: src/components/ContractPanel/ContractPanel.tsx:365
 msgid "Not all rpc nodes support specifying blocks to read data from"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:432
+#: src/components/ContractPanel/ContractPanel.tsx:433
 msgid "Please connect wallet first"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:301
+#: src/components/ContractPanel/ContractPanel.tsx:302
 msgid "Read"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:533
+#: src/components/ContractPanel/ContractPanel.tsx:534
 msgid "Run"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:533
+#: src/components/ContractPanel/ContractPanel.tsx:534
 msgid "Running..."
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:488
+#: src/components/ContractPanel/ContractPanel.tsx:489
 msgid "Type"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:489
+#: src/components/ContractPanel/ContractPanel.tsx:490
 msgid "Value"
 msgstr ""
 
-#: src/components/ContractPanel/ContractPanel.tsx:318
+#: src/components/ContractPanel/ContractPanel.tsx:319
 msgid "Write"
 msgstr ""

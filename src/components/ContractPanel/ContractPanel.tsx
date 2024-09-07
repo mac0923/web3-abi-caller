@@ -210,7 +210,7 @@ function MoreOptionsLine() {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{`Confirm deletion?`}</AlertDialogTitle>
+            <AlertDialogTitle>{t`Confirm deletion?`}</AlertDialogTitle>
             <AlertDialogDescription>
               {t`Confirming the deletion of the ${selectedContract?.name ?? ''} contract?`}
             </AlertDialogDescription>
