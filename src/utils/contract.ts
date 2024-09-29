@@ -57,12 +57,20 @@ export async function writeContract({
 }): Promise<{ isError: boolean; data: any }> {
   const contract: ethers.Contract = new ethers.Contract(address, JSON.parse(abi), signer)
 
+  const newArgs = args.map(arg => {
+    if (arg === null || arg === undefined) {
+      return arg
+    }
+    return JSON.parse(arg)
+  })
+
   try {
     return {
       isError: false,
-      data: await contract[funcName](...args),
+      data: await contract[funcName](...newArgs),
     }
   } catch (e: any) {
+    console.error(e)
     return {
       isError: true,
       data: e,
