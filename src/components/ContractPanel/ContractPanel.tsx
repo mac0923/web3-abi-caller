@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { isAddress } from 'viem'
 import { t } from '@lingui/macro'
 import { Trans } from '@lingui/react'
-import { useAccount } from 'wagmi'
+import { useAccount, useChainId } from 'wagmi'
 import { toast } from 'sonner'
 import { TrashIcon, Pencil2Icon, CopyIcon } from '@radix-ui/react-icons'
 import classnames from 'classnames'
@@ -388,9 +388,18 @@ function FunctionInfoLine({ funcName, isWrite }: { funcName: string; isWrite: bo
   )
 }
 
-function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: boolean }) {
+function FunctionInputs({
+  funcName,
+  isWrite,
+  chainId,
+}: {
+  funcName: string
+  isWrite: boolean
+  chainId: number
+}) {
   const { selectedContract, clearContractOutput, addContractOutput } = useContext(ContractContext)
   const { isConnected } = useAccount()
+  const currentChainId = useChainId()
 
   const [running, setRunning] = useState(false)
   const [values, setValues] = useState<string[]>([])
@@ -447,6 +456,13 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
         toast.error(t`Please connect wallet first`, { duration: 3000, style: { fontSize: '16px' } })
         return
       }
+      if (chainId !== currentChainId) {
+        toast.error(t`Please switch to the correct chain`, {
+          duration: 3000,
+          style: { fontSize: '16px' },
+        })
+        return
+      }
       let result
       if (isWrite) {
         const signer = await getEthersSigner(wagmiConfig, { chainId: selectedContract.chainId })
@@ -486,6 +502,8 @@ function FunctionInputs({ funcName, isWrite }: { funcName: string; isWrite: bool
     try {
       setRunning(true)
       await call()
+    } catch (e) {
+      console.error(e)
     } finally {
       setRunning(false)
     }
@@ -661,6 +679,7 @@ export default function ContractPanel() {
                 <FunctionInputs
                   funcName={selectedFunc.name}
                   isWrite={selectedFunc.isWrite}
+                  chainId={selectedContract.chainId}
                 ></FunctionInputs>
                 <FunctionOutputs></FunctionOutputs>
               </ScrollArea>

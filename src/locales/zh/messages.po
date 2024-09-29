@@ -14,66 +14,66 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. js-lingui-explicit-id
-#: src/components/ContractPanel/ContractPanel.tsx:245
+#: src/components/ContractPanel/ContractPanel.tsx:259
 msgid "contract-name"
 msgstr "合约名"
 
 #. js-lingui-explicit-id
-#: src/components/ContractPanel/ContractPanel.tsx:487
+#: src/components/ContractPanel/ContractPanel.tsx:519
 msgid "func-name"
 msgstr "字段名"
 
-#: src/components/AddContractButton/AddContractButton.tsx:120
-#: src/components/AddContractButton/AddContractButton.tsx:126
-#: src/components/ContractPanel/ContractPanel.tsx:164
-#: src/components/ContractPanel/ContractPanel.tsx:170
+#: src/components/AddContractButton/AddContractButton.tsx:142
+#: src/components/AddContractButton/AddContractButton.tsx:148
+#: src/components/ContractPanel/ContractPanel.tsx:178
+#: src/components/ContractPanel/ContractPanel.tsx:184
 msgid "Abi"
 msgstr ""
 
-#: src/components/AddContractButton/AddContractButton.tsx:84
-#: src/components/AddContractButton/AddContractButton.tsx:88
-#: src/components/ContractPanel/ContractPanel.tsx:132
+#: src/components/AddContractButton/AddContractButton.tsx:96
+#: src/components/AddContractButton/AddContractButton.tsx:100
+#: src/components/ContractPanel/ContractPanel.tsx:136
 msgid "Add Contract"
 msgstr "添加合约"
 
-#: src/components/ContractPanel/ContractPanel.tsx:248
+#: src/components/ContractPanel/ContractPanel.tsx:262
 msgid "Address"
 msgstr "合约地址"
 
-#: src/components/ContractPanel/ContractPanel.tsx:359
-#: src/components/ContractPanel/ContractPanel.tsx:574
+#: src/components/ContractPanel/ContractPanel.tsx:373
+#: src/components/ContractPanel/ContractPanel.tsx:606
 msgid "BlockNumber"
 msgstr "BlockNumber"
 
-#: src/components/AddContractButton/AddContractButton.tsx:135
-#: src/components/ContractPanel/ContractPanel.tsx:179
-#: src/components/ContractPanel/ContractPanel.tsx:219
+#: src/components/AddContractButton/AddContractButton.tsx:157
+#: src/components/ContractPanel/ContractPanel.tsx:193
+#: src/components/ContractPanel/ContractPanel.tsx:233
 msgid "Cancel"
 msgstr "取消"
 
-#: src/components/AddContractButton/AddContractButton.tsx:97
-#: src/components/AddContractButton/AddContractButton.tsx:101
-#: src/components/ContractPanel/ContractPanel.tsx:141
-#: src/components/ContractPanel/ContractPanel.tsx:145
-#: src/components/ContractPanel/ContractPanel.tsx:247
+#: src/components/AddContractButton/AddContractButton.tsx:114
+#: src/components/AddContractButton/AddContractButton.tsx:118
+#: src/components/ContractPanel/ContractPanel.tsx:150
+#: src/components/ContractPanel/ContractPanel.tsx:154
+#: src/components/ContractPanel/ContractPanel.tsx:261
 msgid "Chain"
 msgstr "链"
 
-#: src/components/ContractPanel/ContractPanel.tsx:540
+#: src/components/ContractPanel/ContractPanel.tsx:572
 msgid "Clear Out"
 msgstr "清理输出"
 
-#: src/components/AddContractButton/AddContractButton.tsx:141
-#: src/components/ContractPanel/ContractPanel.tsx:185
-#: src/components/ContractPanel/ContractPanel.tsx:220
+#: src/components/AddContractButton/AddContractButton.tsx:163
+#: src/components/ContractPanel/ContractPanel.tsx:199
+#: src/components/ContractPanel/ContractPanel.tsx:234
 msgid "Confirm"
 msgstr "确认"
 
-#: src/components/ContractPanel/ContractPanel.tsx:213
+#: src/components/ContractPanel/ContractPanel.tsx:227
 msgid "Confirm deletion?"
 msgstr "确认删除?"
 
-#: src/components/ContractPanel/ContractPanel.tsx:215
+#: src/components/ContractPanel/ContractPanel.tsx:229
 msgid "Confirming the deletion of the {0} contract?"
 msgstr "确认删除{0}合约吗?"
 
@@ -81,10 +81,10 @@ msgstr "确认删除{0}合约吗?"
 msgid "Connect Wallet"
 msgstr "连接钱包"
 
-#: src/components/AddContractButton/AddContractButton.tsx:114
-#: src/components/AddContractButton/AddContractButton.tsx:116
-#: src/components/ContractPanel/ContractPanel.tsx:158
-#: src/components/ContractPanel/ContractPanel.tsx:160
+#: src/components/AddContractButton/AddContractButton.tsx:131
+#: src/components/AddContractButton/AddContractButton.tsx:137
+#: src/components/ContractPanel/ContractPanel.tsx:167
+#: src/components/ContractPanel/ContractPanel.tsx:173
 msgid "Contract"
 msgstr "合约地址"
 
@@ -92,7 +92,7 @@ msgstr "合约地址"
 msgid "Copy"
 msgstr "拷贝地址"
 
-#: src/components/ContractPanel/ContractPanel.tsx:207
+#: src/components/ContractPanel/ContractPanel.tsx:221
 msgid "Delete"
 msgstr "删除"
 
@@ -100,57 +100,61 @@ msgstr "删除"
 msgid "Disconnect"
 msgstr "断开连接"
 
-#: src/components/ContractPanel/ContractPanel.tsx:126
+#: src/components/ContractPanel/ContractPanel.tsx:130
 msgid "Edit"
 msgstr "编辑"
 
-#: src/components/ContractPanel/ContractPanel.tsx:449
+#: src/components/ContractPanel/ContractPanel.tsx:479
 msgid "Failed to get provider"
 msgstr "获取RPC节点失败"
 
-#: src/components/ContractPanel/ContractPanel.tsx:362
+#: src/components/ContractPanel/ContractPanel.tsx:376
 msgid "Fetch data from the specified blockNumber"
 msgstr "从指定的BlockNumber中获取数据"
 
-#: src/components/ContractPanel/ContractPanel.tsx:348
+#: src/components/ContractPanel/ContractPanel.tsx:362
 msgid "Function"
 msgstr "方法"
 
-#: src/components/AddContractButton/AddContractButton.tsx:91
-#: src/components/AddContractButton/AddContractButton.tsx:93
-#: src/components/ContractPanel/ContractPanel.tsx:135
-#: src/components/ContractPanel/ContractPanel.tsx:137
+#: src/components/AddContractButton/AddContractButton.tsx:103
+#: src/components/AddContractButton/AddContractButton.tsx:109
+#: src/components/ContractPanel/ContractPanel.tsx:139
+#: src/components/ContractPanel/ContractPanel.tsx:145
 msgid "Name"
 msgstr "合约名"
 
-#: src/components/ContractPanel/ContractPanel.tsx:365
+#: src/components/ContractPanel/ContractPanel.tsx:379
 msgid "Not all rpc nodes support specifying blocks to read data from"
 msgstr "并非所有rpc节点都支持指定从指定BlockNumber读取数据"
 
-#: src/components/ContractPanel/ContractPanel.tsx:433
+#: src/components/ContractPanel/ContractPanel.tsx:456
 msgid "Please connect wallet first"
 msgstr "请先连接钱包"
 
-#: src/components/ContractPanel/ContractPanel.tsx:302
+#: src/components/ContractPanel/ContractPanel.tsx:460
+msgid "Please switch to the correct chain"
+msgstr "请切换至正确的链"
+
+#: src/components/ContractPanel/ContractPanel.tsx:316
 msgid "Read"
 msgstr "读"
 
-#: src/components/ContractPanel/ContractPanel.tsx:534
+#: src/components/ContractPanel/ContractPanel.tsx:566
 msgid "Run"
 msgstr "运行"
 
-#: src/components/ContractPanel/ContractPanel.tsx:534
+#: src/components/ContractPanel/ContractPanel.tsx:566
 msgid "Running..."
 msgstr "执行中..."
 
-#: src/components/ContractPanel/ContractPanel.tsx:489
+#: src/components/ContractPanel/ContractPanel.tsx:521
 msgid "Type"
 msgstr "类型"
 
-#: src/components/ContractPanel/ContractPanel.tsx:490
+#: src/components/ContractPanel/ContractPanel.tsx:522
 msgid "Value"
 msgstr "值"
 
-#: src/components/ContractPanel/ContractPanel.tsx:319
+#: src/components/ContractPanel/ContractPanel.tsx:333
 msgid "Write"
 msgstr "写"
