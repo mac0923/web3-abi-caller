@@ -12,7 +12,7 @@ import {
 import { ContractContext } from '@/context/ContractContext'
 
 function GroupItem({ chainId, items }: { chainId: number; items: ContractParams[] }) {
-  const { updateSelectedContractId } = useContext(ContractContext)
+  const { updateSelectedContractId, selectedContractId } = useContext(ContractContext)
 
   const chainConfig = useMemo(() => {
     return ChainConfigs[chainId]
@@ -20,7 +20,7 @@ function GroupItem({ chainId, items }: { chainId: number; items: ContractParams[
 
   return (
     <>
-      <AccordionItem value={chainConfig.name}>
+      <AccordionItem value={chainConfig.id.toString()}>
         <AccordionTrigger className="pl-[8px] pr-[8px]">
           <div className="flex items-center">
             <LayersIcon className="mr-[8px]"></LayersIcon>
@@ -35,7 +35,11 @@ function GroupItem({ chainId, items }: { chainId: number; items: ContractParams[
               className="h-[52px] border-t flex items-center pl-[16px]"
             >
               <FileTextIcon className="mr-[4px]"></FileTextIcon>
-              <div className=" hover:underline">{item.name}</div>
+              <div
+                className={`hover:underline ${selectedContractId === item.id ? 'underline' : ''}`}
+              >
+                {item.name}
+              </div>
             </div>
           ))}
         </AccordionContent>
@@ -45,7 +49,7 @@ function GroupItem({ chainId, items }: { chainId: number; items: ContractParams[
 }
 
 export default function ContractList() {
-  const { contracts } = useContext(ContractContext)
+  const { contracts, selectedContract } = useContext(ContractContext)
 
   const groupByChainId = useMemo(() => {
     return contracts.reduce(
@@ -63,7 +67,10 @@ export default function ContractList() {
   return (
     <>
       <ScrollArea className="h-[620px] w-full">
-        <Accordion type="multiple">
+        <Accordion
+          type="multiple"
+          defaultValue={selectedContract ? [selectedContract?.chainId.toString()] : undefined}
+        >
           {Object.entries(groupByChainId).map(([chainId, items]) => (
             <GroupItem key={chainId} chainId={Number(chainId)} items={items}></GroupItem>
           ))}
