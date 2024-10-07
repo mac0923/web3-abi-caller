@@ -4,7 +4,8 @@ import { t } from '@lingui/macro'
 import { Trans } from '@lingui/react'
 import { useAccount, useChainId } from 'wagmi'
 import { toast } from 'sonner'
-import { TrashIcon, Pencil2Icon, CopyIcon } from '@radix-ui/react-icons'
+import { ethers } from 'ethers'
+import { TrashIcon, Pencil2Icon, CopyIcon, FileIcon } from '@radix-ui/react-icons'
 import classnames from 'classnames'
 import JSONBig from 'json-bigint'
 import { useCopyToClipboard } from 'react-use'
@@ -238,9 +239,52 @@ function MoreOptionsLine() {
     )
   }
 
+  function AbiButton() {
+    const [showDialog, setShowDialog] = useState(false)
+
+    const formattedAbi = useMemo(() => {
+      const iface = new ethers.Interface(selectedContract?.abi ?? '[]')
+      const checkABI = iface.format()
+      return checkABI
+    }, [])
+
+    return (
+      <>
+        <Dialog open={showDialog} onOpenChange={v => setShowDialog(v)}>
+          <DialogTrigger asChild>
+            <Button className="mr-[6px]" variant="outline">
+              <div className="flex items-center">
+                <FileIcon className="mr-[6px]"></FileIcon> ABI
+              </div>
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>{t`Show ABI`}</DialogTitle>
+              <DialogDescription>
+                <div className="mt-[12px]">
+                  <ScrollArea className="h-[380px] w-full">
+                    {formattedAbi.map((item, index) => (
+                      <div key={index} className="text-gray-300 text-[16px] leading-[24px]">
+                        {JSON.stringify(item)}
+                        <br />
+                        <br />
+                      </div>
+                    ))}
+                  </ScrollArea>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+      </>
+    )
+  }
+
   return (
     <>
-      <div className="flex items-center justify-end p">
+      <div className="flex items-center justify-end ">
+        <AbiButton></AbiButton>
         <EditButton></EditButton>
         <DeleteButton></DeleteButton>
       </div>
