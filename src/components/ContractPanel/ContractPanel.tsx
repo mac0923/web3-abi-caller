@@ -663,17 +663,14 @@ function FunctionOutputs() {
               </div>
             </div>
             <div>
-              <ScrollArea className="w-[55vw]">
+              <ScrollArea className="w-[55vw] pl-[12px] pr-[12px] pt-[16px] pb-[16px]">
                 <div
-                  className={classnames(
-                    'pl-[12px] pr-[12px] pt-[6px] pb-[6px] text-[15px] max-h-[220px]',
-                    [item.isError ? 'text-red-500' : 'text-white']
-                  )}
+                  className={classnames('text-[15px] max-h-[220px]', [
+                    item.isError ? 'text-red-500' : 'text-white',
+                  ])}
                 >
                   {item.isError ? (
-                    <pre className="pl-[12px] pr-[12px] pt-[6px] pb-[6px] ">
-                      {item.isError ? JSON.stringify(item.errMsg) : undefined}
-                    </pre>
+                    <pre>{item.isError ? JSON.stringify(item.errMsg) : undefined}</pre>
                   ) : undefined}
                   {!item.isError ? (
                     <JsonView data={parseJson(item.output)} style={CustomDarkJsonStyle} />

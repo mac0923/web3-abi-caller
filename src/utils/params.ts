@@ -1,4 +1,5 @@
 import { ParamType } from 'ethers'
+import { parseJson } from './common'
 
 function formatBaseTypeValue(param: any, paramType: ParamType): any {
   const baseType = paramType.baseType
@@ -25,12 +26,26 @@ function formatTupleTypeValue(param: any, paramType: ParamType): any {
 }
 
 function formatArrayTypeValue(param: any, paramType: ParamType): any {
-  paramType
-  return param
+  const paramToArrayVal: any[] = parseJson(param.replace(/'/g, '"'))
+
+  const childrenParamType = paramType.arrayChildren
+
+  if (!childrenParamType) {
+    return []
+  }
+
+  if (childrenParamType.baseType === 'array') {
+    return paramToArrayVal.map(item => {
+      return formatArrayTypeValue(item, childrenParamType)
+    })
+  }
+
+  return paramToArrayVal.map(item => {
+    return formatBaseTypeValue(item, childrenParamType)
+  })
 }
 
 export function formatInputParams(params: any[], paramsType: ReadonlyArray<ParamType>): any[] {
-  console.log('paramsType', paramsType)
   const result: any[] = []
 
   for (let i = 0; i < params.length; i++) {
