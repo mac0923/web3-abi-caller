@@ -500,7 +500,7 @@ function FunctionInputs({
         toast.error(t`Please connect wallet first`, { duration: 3000, style: { fontSize: '16px' } })
         return
       }
-      if (chainId !== currentChainId) {
+      if (chainId !== currentChainId && isWrite) {
         toast.error(t`Please switch to the correct chain`, {
           duration: 3000,
           style: { fontSize: '16px' },

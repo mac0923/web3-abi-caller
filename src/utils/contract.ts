@@ -1,5 +1,6 @@
 import { Base64 } from 'js-base64'
 import { ethers } from 'ethers'
+import { formatInputParams } from './params'
 
 export function encodeContractId(chainId: string, address: string): string {
   const str = `${chainId}-${address}`
@@ -28,11 +29,23 @@ export async function readContract({
   blockNumber?: number
 }): Promise<{ isError: boolean; data: any }> {
   const contract: ethers.Contract = new ethers.Contract(address, JSON.parse(abi), provider)
+  const callFunc = contract.getFunction(funcName)
+
+  const iface = new ethers.Interface(abi)
 
   try {
+    const ifaceFunc = iface.getFunction(funcName)
+    if (!ifaceFunc) {
+      return {
+        isError: true,
+        data: 'Function not found',
+      }
+    }
+    const newArgs = formatInputParams(args, ifaceFunc.inputs)
+
     return {
       isError: false,
-      data: await contract[funcName](...args, blockNumber ? { blockTag: blockNumber } : {}),
+      data: await callFunc(...newArgs, blockNumber ? { blockTag: blockNumber } : {}),
     }
   } catch (e) {
     return {
@@ -56,18 +69,23 @@ export async function writeContract({
   args: any[]
 }): Promise<{ isError: boolean; data: any }> {
   const contract: ethers.Contract = new ethers.Contract(address, JSON.parse(abi), signer)
+  const callFunc = contract.getFunction(funcName)
 
-  const newArgs = args.map(arg => {
-    if (arg === null || arg === undefined) {
-      return arg
-    }
-    return JSON.parse(arg)
-  })
+  const iface = new ethers.Interface(abi)
 
   try {
+    const ifaceFunc = iface.getFunction(funcName)
+    if (!ifaceFunc) {
+      return {
+        isError: true,
+        data: 'Function not found',
+      }
+    }
+    const newArgs = formatInputParams(args, ifaceFunc.inputs)
+
     return {
       isError: false,
-      data: await contract[funcName](...newArgs),
+      data: await callFunc(...newArgs),
     }
   } catch (e: any) {
     console.error(e)
